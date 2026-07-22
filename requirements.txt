@@ -1,2 +1,9 @@
-langchain
-langgraph
+langgraph>=0.2.0
+langchain-groq>=0.2.0
+langchain-core>=0.3.0
+python-dotenv>=1.0.0
+pydantic>=2.0.0
+ddgs>=1.0.0
+
+# Still used by the image node until M2 swaps it to Pollinations
+google-genai>=0.1.0

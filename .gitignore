@@ -1,0 +1,40 @@
+# Environment / Secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Virtual Environments
+.venv/
+venv/
+env/
+ENV/
+
+# Generated Output
+images/
+outputs/
+
+# Ignore generated markdown only inside outputs
+outputs/*.md
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# LangGraph
+*.sqlite
+*.sqlite3
+.langgraph_api/
+
+# Logs
+*.log

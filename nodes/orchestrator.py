@@ -5,6 +5,7 @@ from config import structured
 from langchain_core.messages import HumanMessage, SystemMessage
 from schemas import Plan
 from state import State
+from utils.retry import invoke_with_retry
 
 ORCH_SYSTEM = """You are a senior technical writer and developer advocate.
 Produce a highly actionable outline for a technical blog post.
@@ -32,7 +33,8 @@ def orchestrator_node(state: State) -> dict:
 
     forced_kind = "news_roundup" if mode == "open_book" else None
 
-    plan: Plan = planner.invoke(
+    plan: Plan = invoke_with_retry(
+        planner,
         [
             SystemMessage(content=ORCH_SYSTEM),
             HumanMessage(
@@ -44,7 +46,7 @@ def orchestrator_node(state: State) -> dict:
                     f"Evidence:\n{[e.model_dump() for e in evidence][:16]}"
                 )
             ),
-        ]
+        ],
     )
     if forced_kind:
         plan.blog_kind = "news_roundup"

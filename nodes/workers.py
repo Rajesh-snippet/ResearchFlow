@@ -6,6 +6,8 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.types import Send
 from schemas import EvidenceItem, Plan, Task
 from state import State
+from utils.retry import invoke_with_retry
+from utils.validators import check_citations
 
 WORKER_SYSTEM = """You are a senior technical writer and developer advocate.
 Write ONE section of a technical blog post in Markdown.
@@ -60,7 +62,8 @@ def worker_node(payload: dict) -> dict:
         for e in evidence[:20]
     )
 
-    section_md = llm.invoke(
+    section_md = invoke_with_retry(
+        llm,
         [
             SystemMessage(content=WORKER_SYSTEM),
             HumanMessage(
@@ -84,7 +87,12 @@ def worker_node(payload: dict) -> dict:
                     f"Evidence (ONLY cite these URLs):\n{evidence_text}\n"
                 )
             ),
-        ]
+        ],
     ).content.strip()
+
+    # M3: sanity-check that the worker only cited URLs it was actually
+    # given. Logs a warning on mismatch rather than failing the run -
+    # this is a heuristic signal to review, not a hard gate.
+    check_citations(section_md, evidence, section_title=task.title)
 
     return {"sections": [(task.id, section_md)]}

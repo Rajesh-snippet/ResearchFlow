@@ -8,6 +8,7 @@ from config import structured
 from langchain_core.messages import HumanMessage, SystemMessage
 from schemas import RouterDecision
 from state import State
+from utils.retry import invoke_with_retry
 
 ROUTER_SYSTEM = """You are a routing module for a technical blog planner.
 
@@ -26,11 +27,12 @@ If needs_research=true:
 
 def router_node(state: State) -> dict:
     decider = structured(RouterDecision)
-    decision: RouterDecision = decider.invoke(
+    decision: RouterDecision = invoke_with_retry(
+        decider,
         [
             SystemMessage(content=ROUTER_SYSTEM),
             HumanMessage(content=f"Topic: {state['topic']}\nAs-of date: {state['as_of']}"),
-        ]
+        ],
     )
 
     if decision.mode == "open_book":

@@ -5,6 +5,7 @@ from config import structured
 from langchain_core.messages import HumanMessage, SystemMessage
 from schemas import GlobalImagePlan
 from state import State
+from utils.retry import invoke_with_retry
 
 DECIDE_IMAGES_SYSTEM = """You are an expert technical editor.
 Decide if images/diagrams are needed for THIS blog.
@@ -25,7 +26,8 @@ def decide_images(state: State) -> dict:
     plan = state["plan"]
     assert plan is not None
 
-    image_plan: GlobalImagePlan = planner.invoke(
+    image_plan: GlobalImagePlan = invoke_with_retry(
+        planner,
         [
             SystemMessage(content=DECIDE_IMAGES_SYSTEM),
             HumanMessage(
@@ -36,7 +38,7 @@ def decide_images(state: State) -> dict:
                     f"{merged_md}"
                 )
             ),
-        ]
+        ],
     )
 
     return {

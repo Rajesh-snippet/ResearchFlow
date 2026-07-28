@@ -22,7 +22,9 @@ Return strictly GlobalImagePlan.
 
 def decide_images(state: State) -> dict:
     planner = structured(GlobalImagePlan)
-    merged_md = state["merged_md"]
+    # M4: editor now runs before this node, so prefer the polished text.
+    # Fallback to merged_md keeps this node safe to test in isolation.
+    source_md = state.get("edited_md") or state["merged_md"]
     plan = state["plan"]
     assert plan is not None
 
@@ -35,7 +37,7 @@ def decide_images(state: State) -> dict:
                     f"Blog kind: {plan.blog_kind}\n"
                     f"Topic: {state['topic']}\n\n"
                     "Insert placeholders + propose image prompts.\n\n"
-                    f"{merged_md}"
+                    f"{source_md}"
                 )
             ),
         ],

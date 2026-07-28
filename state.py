@@ -24,8 +24,9 @@ class State(TypedDict):
     # workers - operator.add merges parallel worker outputs into one list
     sections: Annotated[List[tuple], operator.add]  # (task_id, section_md)
 
-    # reducer / image
+    # reducer / editor / image
     merged_md: str
+    edited_md: str
     md_with_placeholders: str
     image_specs: List[dict]
 

@@ -2,6 +2,11 @@
 Builds the full ResearchFlow graph.
 
 router -> (research?) -> orchestrator -> [fanout] -> worker x N -> reducer -> END
+
+M5: build_graph() now accepts an optional checkpointer. The reducer
+subgraph is compiled separately but has no checkpointer of its own, so
+it automatically inherits the parent graph's checkpointer at runtime -
+no extra wiring needed there.
 """
 from langgraph.graph import END, START, StateGraph
 
@@ -13,7 +18,7 @@ from nodes.workers import fanout, worker_node
 from state import State
 
 
-def build_graph():
+def build_graph(checkpointer=None):
     g = StateGraph(State)
 
     g.add_node("router", router_node)
@@ -32,4 +37,4 @@ def build_graph():
     g.add_edge("worker", "reducer")
     g.add_edge("reducer", END)
 
-    return g.compile()
+    return g.compile(checkpointer=checkpointer)

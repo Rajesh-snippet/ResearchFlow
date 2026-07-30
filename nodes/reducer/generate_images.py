@@ -10,7 +10,6 @@ M3: final markdown now writes to outputs/ instead of the project root
 being gitignored). images/ stays a separate top-level folder (per project
 structure), so markdown in outputs/ links back to it as ../images/...
 """
-import re
 import time
 import urllib.parse
 from pathlib import Path
@@ -20,6 +19,7 @@ import requests
 from state import State
 from utils.constants import IMAGES_DIR, OUTPUTS_DIR
 from utils.logger import get_logger
+from utils.text import slugify
 
 log = get_logger(__name__)
 
@@ -59,13 +59,6 @@ def _pollinations_generate_image_bytes(prompt: str, size: str = "1024x1024") -> 
     return resp.content
 
 
-def _safe_slug(title: str) -> str:
-    s = title.strip().lower()
-    s = re.sub(r"[^a-z0-9 _-]+", "", s)
-    s = re.sub(r"\s+", "_", s).strip("_")
-    return s or "blog"
-
-
 def generate_and_place_images(state: State) -> dict:
     plan = state["plan"]
     assert plan is not None
@@ -77,7 +70,7 @@ def generate_and_place_images(state: State) -> dict:
     outputs_dir.mkdir(exist_ok=True)
 
     if not image_specs:
-        filename = outputs_dir / f"{_safe_slug(plan.blog_title)}.md"
+        filename = outputs_dir / f"{slugify(plan.blog_title)}.md"
         filename.write_text(md, encoding="utf-8")
         log.info("Wrote final post to %s (no images requested)", filename)
         return {"final": md}
@@ -112,7 +105,7 @@ def generate_and_place_images(state: State) -> dict:
         img_md = f"![{spec['alt']}](../{IMAGES_DIR}/{filename})\n*{spec['caption']}*"
         md = md.replace(placeholder, img_md)
 
-    out_filename = outputs_dir / f"{_safe_slug(plan.blog_title)}.md"
+    out_filename = outputs_dir / f"{slugify(plan.blog_title)}.md"
     out_filename.write_text(md, encoding="utf-8")
     log.info("Wrote final post to %s", out_filename)
     return {"final": md}

@@ -26,3 +26,22 @@ DEFAULT_IMAGE_SIZE = "1024x1024"
 # --- Output paths ---
 OUTPUTS_DIR = "outputs"
 IMAGES_DIR = "images"
+
+# --- Checkpointing (M5) ---
+CHECKPOINT_DB_PATH = "researchflow_checkpoints.sqlite"
+
+# Explicit allowlist for checkpoint (de)serialization (M5). Without this,
+# LangGraph's default msgpack serializer allows reconstructing ANY Python
+# type found in checkpoint data (only warning, not blocking) - a known
+# security consideration if the checkpoint DB is ever compromised
+# (see CVE-2026-28277). Restricting to exactly our own schema classes
+# closes that off and also silences the "unregistered type" warning.
+CHECKPOINT_ALLOWED_MSGPACK_MODULES = [
+    ("schemas", "Task"),
+    ("schemas", "Plan"),
+    ("schemas", "EvidenceItem"),
+    ("schemas", "RouterDecision"),
+    ("schemas", "EvidencePack"),
+    ("schemas", "ImageSpec"),
+    ("schemas", "GlobalImagePlan"),
+]

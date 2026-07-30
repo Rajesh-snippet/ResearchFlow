@@ -1,4 +1,4 @@
-# Environment / Secrets
+# Environment / secrets
 .env
 .env.*
 !.env.example
@@ -12,18 +12,16 @@ __pycache__/
 build/
 dist/
 
-# Virtual Environments
-.venv/
+# Virtual environments
 venv/
+.venv/
 env/
 ENV/
 
-# Generated Output
+# Generated images (regenerated on each run via Pollinations - not tracked)
 images/
-outputs/
 
-# Ignore generated markdown only inside outputs
-outputs/*.md
+# outputs/ (generated blog posts) IS tracked - kept as portfolio examples
 
 # IDE / OS
 .vscode/
@@ -31,9 +29,12 @@ outputs/*.md
 .DS_Store
 Thumbs.db
 
-# LangGraph
+# LangGraph / checkpoint state (M5)
 *.sqlite
 *.sqlite3
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
 .langgraph_api/
 
 # Logs

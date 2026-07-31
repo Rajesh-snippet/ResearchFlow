@@ -9,6 +9,9 @@ from state import State
 from utils.retry import invoke_with_retry
 from utils.validators import check_citations
 
+# NEW: Global concurrency limiter
+from utils.rate_limiter import llm_semaphore
+
 WORKER_SYSTEM = """You are a senior technical writer and developer advocate.
 Write ONE section of a technical blog post in Markdown.
 
@@ -62,33 +65,37 @@ def worker_node(payload: dict) -> dict:
         for e in evidence[:20]
     )
 
-    section_md = invoke_with_retry(
-        llm,
-        [
-            SystemMessage(content=WORKER_SYSTEM),
-            HumanMessage(
-                content=(
-                    f"Blog title: {plan.blog_title}\n"
-                    f"Audience: {plan.audience}\n"
-                    f"Tone: {plan.tone}\n"
-                    f"Blog kind: {plan.blog_kind}\n"
-                    f"Constraints: {plan.constraints}\n"
-                    f"Topic: {payload['topic']}\n"
-                    f"Mode: {payload.get('mode')}\n"
-                    f"As-of: {payload.get('as_of')} (recency_days={payload.get('recency_days')})\n\n"
-                    f"Section title: {task.title}\n"
-                    f"Goal: {task.goal}\n"
-                    f"Target words: {task.target_words}\n"
-                    f"Tags: {task.tags}\n"
-                    f"requires_research: {task.requires_research}\n"
-                    f"requires_citations: {task.requires_citations}\n"
-                    f"requires_code: {task.requires_code}\n"
-                    f"Bullets:{bullets_text}\n\n"
-                    f"Evidence (ONLY cite these URLs):\n{evidence_text}\n"
-                )
-            ),
-        ],
-    ).content.strip()
+    # NEW: Only the actual LLM call is rate-limited.
+    # Everything else (prompt creation, validation, formatting)
+    # still runs in parallel.
+    with llm_semaphore:
+        section_md = invoke_with_retry(
+            llm,
+            [
+                SystemMessage(content=WORKER_SYSTEM),
+                HumanMessage(
+                    content=(
+                        f"Blog title: {plan.blog_title}\n"
+                        f"Audience: {plan.audience}\n"
+                        f"Tone: {plan.tone}\n"
+                        f"Blog kind: {plan.blog_kind}\n"
+                        f"Constraints: {plan.constraints}\n"
+                        f"Topic: {payload['topic']}\n"
+                        f"Mode: {payload.get('mode')}\n"
+                        f"As-of: {payload.get('as_of')} (recency_days={payload.get('recency_days')})\n\n"
+                        f"Section title: {task.title}\n"
+                        f"Goal: {task.goal}\n"
+                        f"Target words: {task.target_words}\n"
+                        f"Tags: {task.tags}\n"
+                        f"requires_research: {task.requires_research}\n"
+                        f"requires_citations: {task.requires_citations}\n"
+                        f"requires_code: {task.requires_code}\n"
+                        f"Bullets:{bullets_text}\n\n"
+                        f"Evidence (ONLY cite these URLs):\n{evidence_text}\n"
+                    )
+                ),
+            ],
+        ).content.strip()
 
     # M3: sanity-check that the worker only cited URLs it was actually
     # given. Logs a warning on mismatch rather than failing the run -

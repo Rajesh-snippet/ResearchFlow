@@ -45,3 +45,24 @@ CHECKPOINT_ALLOWED_MSGPACK_MODULES = [
     ("schemas", "ImageSpec"),
     ("schemas", "GlobalImagePlan"),
 ]
+
+...
+# Existing constants
+LOG_LEVEL = "INFO"
+DEFAULT_TIMEOUT = 30
+
+
+# =============================================================================
+# Rate Limiting
+# =============================================================================
+
+MAX_PARALLEL_LLM_CALLS = 2
+
+
+# =============================================================================
+# Retry Configuration
+# =============================================================================
+
+MAX_LLM_RETRIES = 3
+DEFAULT_RETRY_DELAY = 5
+MAX_RETRY_DELAY = 30

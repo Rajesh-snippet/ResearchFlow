@@ -30,3 +30,25 @@ def _to_status_response(record) -> JobStatusResponse:
         created_at=record.created_at,
         updated_at=record.updated_at,
     )
+
+
+@router.post("/generate", response_model=GenerateResponse)
+async def generate(req: GenerateRequest, request: Request):
+    job_manager = request.app.state.job_manager
+    record = job_manager.create_job(req.topic, req.mode, req.recency_days)
+    return GenerateResponse(
+        job_id=record.job_id,
+        thread_id=record.thread_id,
+        status=JobStatus(record.status),
+        status_url=f"/jobs/{record.job_id}",
+        stream_url=f"/jobs/{record.job_id}/stream",
+    )
+
+
+@router.get("/jobs/{job_id}", response_model=JobStatusResponse)
+async def get_job(job_id: str, request: Request):
+    job_manager = request.app.state.job_manager
+    record = job_manager.get(job_id)
+    if record is None:
+        raise HTTPException(status_code=404, detail="Job not found (or expired)")
+    return _to_status_response(record)

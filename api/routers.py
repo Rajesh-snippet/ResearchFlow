@@ -96,3 +96,35 @@ async def stream_job(job_id: str, request: Request):
             "X-Accel-Buffering": "no",  # disable nginx buffering if fronted by one
         },
     )
+
+
+@router.get("/jobs/{job_id}/result")
+async def get_result(job_id: str, request: Request):
+    job_manager = request.app.state.job_manager
+    record = job_manager.get(job_id)
+    if record is None:
+        raise HTTPException(status_code=404, detail="Job not found (or expired)")
+    if record.status != "completed":
+        raise HTTPException(
+            status_code=409, detail=f"Job is '{record.status}', not completed yet"
+        )
+    if not record.result_path:
+        raise HTTPException(status_code=500, detail="Job completed but no result was recorded")
+    return {"job_id": job_id, "content": record.result_path}
+
+
+@router.post("/jobs/{job_id}/resume", response_model=ResumeResponse)
+async def resume_job(job_id: str, request: Request):
+    job_manager = request.app.state.job_manager
+    try:
+        record = await job_manager.resume(job_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Job not found (or expired)")
+    return ResumeResponse(
+        job_id=record.job_id,
+        thread_id=record.thread_id,
+        status=JobStatus(record.status),
+        message="Resume triggered from last checkpoint."
+        if record.status == "queued"
+        else f"Job is '{record.status}', nothing to resume.",
+    )

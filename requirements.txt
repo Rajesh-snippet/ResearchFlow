@@ -9,3 +9,9 @@ ddgs>=1.0.0
 google-genai>=0.1.0
 tenacity>=9.0.0
 langgraph-checkpoint-sqlite>=2.0.0
+
+
+#FastAPI Wrapper
+
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0

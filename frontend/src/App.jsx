@@ -83,3 +83,55 @@ export default function App() {
       appendLog(`failed to dispatch: ${err.message}`, 'alert')
     }
   }
+  
+    async function handleResume() {
+      if (!job) return
+      try {
+        await resumeJob(job.job_id)
+        appendLog('resume requested from last checkpoint')
+        setError(null)
+        attachStream(job.job_id)
+      } catch (err) {
+        appendLog(`resume failed: ${err.message}`, 'alert')
+      }
+    }
+  
+    const isRunning = job ? RUNNING_STATUSES.has(job.status) : false
+  
+    return (
+      <div className="app-shell">
+        <header className="masthead">
+          <h1 className="masthead-title">
+            Research<span>Flow</span>
+          </h1>
+          <span className="masthead-sub">multi-agent wire desk</span>
+        </header>
+  
+        <TopicForm onSubmit={handleSubmit} disabled={isRunning} />
+  
+        {job && (
+          <>
+            <PipelineTrace
+              currentNode={job.status === 'completed' ? null : currentNode}
+              visitedNodes={job.status === 'completed' ? new Set() : visitedNodes}
+              jobStatus={job.status}
+              sectionsDone={sectionsDone}
+              sectionsTotal={sectionsTotal}
+            />
+  
+            {error && (
+              <div className="error-banner">
+                <span>{error}</span>
+                <button onClick={handleResume}>Resume from checkpoint</button>
+              </div>
+            )}
+  
+            <ProgressLog entries={logEntries} />
+  
+            <ResultView content={result} topic={job.topic} />
+          </>
+        )}
+      </div>
+    )
+  }
+  

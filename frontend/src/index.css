@@ -1,0 +1,24 @@
+/* -----------------------------------------------------------
+   ResearchFlow design tokens.
+   Concept: a wire-service terminal watching a multi-agent
+   pipeline write a story live. Ink terminal + amber signal
+   trace + teal for verified evidence/citations.
+   ----------------------------------------------------------- */
+:root {
+  --ink: #161a1f;
+  --ink-raised: #1d2229;
+  --paper: #ede8e0;
+  --paper-dim: #cfc9bb;
+  --signal: #c98a2e;
+  --signal-dim: #7a5a26;
+  --evidence: #5fa8a0;
+  --evidence-dim: #3a655f;
+  --alert: #d9584b;
+  --ink-soft: #9ca3aa;
+  --line: #2a3038;
+
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --font-sans: 'IBM Plex Sans', -apple-system, sans-serif;
+
+  --radius: 3px;
+}

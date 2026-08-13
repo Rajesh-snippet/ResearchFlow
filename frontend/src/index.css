@@ -137,3 +137,110 @@ button {
 .topic-row input[type='text']:focus {
   border-color: var(--signal);
 }
+
+.topic-row button {
+  background: var(--signal);
+  color: var(--ink);
+  border: none;
+  border-radius: var(--radius);
+  padding: 0 22px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.topic-row button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.advanced-toggle {
+  background: none;
+  border: none;
+  color: var(--ink-soft);
+  font-size: 11px;
+  padding: 8px 0;
+  cursor: pointer;
+}
+
+.advanced-toggle:hover {
+  color: var(--evidence);
+}
+
+.advanced-row {
+  display: flex;
+  gap: 20px;
+  padding: 12px 0 4px;
+}
+
+.advanced-row label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.advanced-row select,
+.advanced-row input {
+  background: var(--ink-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 8px 10px;
+}
+
+/* ---- Error banner ---- */
+.error-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: rgba(217, 88, 75, 0.1);
+  border: 1px solid var(--alert);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  font-size: 13px;
+}
+
+.error-banner button {
+  background: transparent;
+  border: 1px solid var(--alert);
+  color: var(--alert);
+  border-radius: var(--radius);
+  padding: 6px 12px;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.error-banner button:hover {
+  background: var(--alert);
+  color: var(--ink);
+}
+
+/* ---- Progress log (teletype) ---- */
+.log {
+  margin: 8px 0 24px;
+  overflow: hidden;
+}
+
+.log-header {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--ink-soft);
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--line);
+}

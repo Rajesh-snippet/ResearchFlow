@@ -1,0 +1,98 @@
+.trace {
+  display: flex;
+  align-items: center;
+  padding: 28px 8px;
+  overflow-x: auto;
+}
+
+.trace-segment {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.trace-node {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 6px;
+  min-width: 64px;
+}
+
+.trace-node::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--line);
+  background: var(--ink);
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.trace-node-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  transition: color 0.3s ease;
+}
+
+.trace-node-count {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--signal);
+}
+
+.trace-node--active::before {
+  border-color: var(--signal);
+  background: var(--signal);
+  box-shadow: 0 0 0 4px rgba(201, 138, 46, 0.18);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+.trace-node--active .trace-node-label {
+  color: var(--signal);
+}
+
+.trace-node--done::before {
+  border-color: var(--evidence);
+  background: var(--evidence);
+}
+.trace-node--done .trace-node-label {
+  color: var(--evidence);
+}
+
+.trace-node--failed::before {
+  border-color: var(--alert);
+  background: var(--alert);
+}
+.trace-node--failed .trace-node-label {
+  color: var(--alert);
+}
+
+.trace-wire {
+  flex: 1;
+  height: 1px;
+  min-width: 16px;
+  background: var(--line);
+  transition: background 0.3s ease;
+}
+
+.trace-wire--lit {
+  background: var(--evidence-dim);
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 4px rgba(201, 138, 46, 0.18);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(201, 138, 46, 0.06);
+  }
+}

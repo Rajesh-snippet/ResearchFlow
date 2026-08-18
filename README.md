@@ -13,7 +13,7 @@ Built with **LangGraph, Groq, DuckDuckGo, FastAPI, React/Vite, SQLite checkpoint
 ## Quick Start
 
 ```powershell
-git clone <your-repository-url>
+git clone <https://github.com/Rajesh-snippet/ResearchFlow>
 cd ResearchFlow
 
 python -m venv .venv

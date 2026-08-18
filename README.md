@@ -907,42 +907,14 @@ Future token optimization should therefore include:
 
 ---
 
-### 2. Search quality
-
-DuckDuckGo results may be noisy, duplicated, incomplete, or missing metadata.
-
-ResearchFlow can clean and deduplicate results, but cannot control the external search engine.
-
-### 3. Publication-date uncertainty
+### 2. Publication-date uncertainty
 
 Search results do not always provide reliable publication dates.
 
 ResearchFlow does not guess dates, so some undated sources can remain in open-book research.
 
-### 4. LLM factuality
-
-ResearchFlow improves grounding but cannot guarantee truth.
-
-An LLM can still:
-
-- misinterpret a source
-- combine facts incorrectly
-- overstate conclusions
-- produce unsupported reasoning
-
-Citation validation checks provenance, not perfect factual correctness.
-
-Human review is recommended for high-stakes material.
-
-### 5. In-memory job metadata
-
-The M6 JobManager stores active job metadata in memory.
-
-A server restart can lose active job metadata even if checkpoint data remains.
-
-Production deployment should use durable job storage.
-
-### 6. No authentication
+#
+### 3. No authentication
 
 The current API is designed for local development and portfolio demonstration.
 
@@ -954,21 +926,18 @@ It does not yet provide:
 - API keys
 - per-user quotas
 
-### 7. Single-provider dependency
+### 4. Single-provider dependency
 
 The current LLM integration is centered around Groq.
 
 A provider abstraction would make switching between Groq, OpenRouter, OpenAI, Anthropic, or local models easier.
 
-### 8. SQLite scaling
 
-SQLite is suitable for local development and a single-process prototype. A horizontally scaled production system should use production-grade persistent infrastructure.
-
-### 9. Image service dependency
+### 5. Image service dependency
 
 Image generation depends on an external service. Availability, latency, and generated quality are outside ResearchFlow's control.
 
-### 10. Parallelism versus cost
+### 6. Parallelism versus cost
 
 More parallelism reduces latency but increases token pressure, memory usage, and rate-limit risk.
 

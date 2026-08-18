@@ -1,6 +1,6 @@
 # ResearchFlow
 
-> **ResearchFlow** is a full-stack AI research and content-generation platform that transforms a user topic into a structured, research-backed Markdown article through an observable multi-agent workflow.
+> **ResearchFlow** is a full-stack AI research and blog-generation platform that transforms a user topic into a structured, research-backed Markdown article through an observable multi-agent workflow.
 
 Built with **LangGraph, Groq, DuckDuckGo, FastAPI, React/Vite, SQLite checkpointing, Tenacity, SSE, and Pollinations.ai**.
 

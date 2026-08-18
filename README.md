@@ -491,7 +491,7 @@ The image stage uses Pollinations.ai and places generated images into the output
 | Agent orchestration | LangGraph |
 | LLM framework | LangChain |
 | LLM provider | Groq |
-| Current model | `openai/gpt-oss-120b` |
+| Current model | `llama-3.3-70b-versatile` |
 | Structured output | Pydantic + JSON Schema |
 | Search | DuckDuckGo via `ddgs` |
 | Retry | Tenacity |

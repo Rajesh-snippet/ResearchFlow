@@ -28,7 +28,7 @@ cd ..
 Add your Groq API key to a `.env` file in the project root:
 
 ```env
-GROQ_API_KEY=your_groq_api_key
+GROQ_API_KEY=#####
 ```
 
 Run backend and frontend in two terminals:
@@ -1176,4 +1176,4 @@ The project is still evolving, but the architecture provides a foundation for a 
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE). Add a `LICENSE` file at the project root with the MIT text (GitHub can generate this for you when creating the repository, or via **Add file → Create new file → LICENSE** in the GitHub UI, which offers an MIT template).
+This project is licensed under the [MIT License](LICENSE). 
